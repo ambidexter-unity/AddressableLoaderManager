@@ -1,0 +1,58 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: WindowAtlasSd
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings: []
+    packingSettings:
+      serializedVersion: 2
+      padding: 4
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 1
+      enableTightPacking: 1
+    variantMultiplier: 0.25
+    packables: []
+    totalSpriteSurfaceArea: 0
+    bindAsDefault: 0
+  m_MasterAtlas: {fileID: 4343727234628468602, guid: 61c3dd4f1ecd2264e8f8b44a9838bcfa,
+    type: 2}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: 4b47cd45e9c02d14bbd58a9bc4c847c5, type: 3}
+  - {fileID: 21300000, guid: 072e01d533811e1478bdc78208492f81, type: 3}
+  - {fileID: 21300000, guid: 53d84ee5ecc7c6d41970d5410626c76f, type: 3}
+  - {fileID: 21300000, guid: fe37cab90ecd4c54caf55c03c4e3858a, type: 3}
+  - {fileID: 21300000, guid: 38d53f5b73e33a1439b1c8d412a4641b, type: 3}
+  - {fileID: 21300000, guid: d3738d9b3c073944883e2b61a538ee49, type: 3}
+  - {fileID: 21300000, guid: 1fff2e2c56cf75a428f092eb9a776bce, type: 3}
+  - {fileID: 21300000, guid: e5186dcdf44df7148835ffcbdb592aa2, type: 3}
+  - {fileID: 21300000, guid: 09ff226fcd1524146bfa26236594c994, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - window_back
+  - BTN_BLUE_CIRCLE_IN
+  - UI_COIN
+  - BTN_GREEN_CIRCLE_OUT
+  - BTN_GRAY_CIRCLE_IN
+  - BTN_GRAY_CIRCLE_OUT
+  - UI_BOLT
+  - BTN_BLUE_CIRCLE_OUT
+  - BTN_GREEN_CIRCLE_IN
+  m_Tag: WindowAtlasHd
+  m_IsVariant: 1

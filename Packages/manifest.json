@@ -1,0 +1,83 @@
+{
+  "dependencies": {
+    "com.demigiant.dotween": "1.2.23",
+    "com.modesttree.zenject": "8.0.0",
+    "com.modesttree.zenject.signals": "8.0.0",
+    "com.unity.addressables": "1.2.4",
+    "com.unity.ads": "2.0.8",
+    "com.unity.analytics": "3.3.2",
+    "com.unity.collab-proxy": "1.2.16",
+    "com.unity.package-manager-ui": "2.1.2",
+    "com.unity.purchasing": "2.0.6",
+    "com.unity.textmeshpro": "2.0.1",
+    "com.unity.timeline": "1.0.0",
+    "io.ambidexter.locale": "https://github.com/ambidexter-unity/Locale.git#2.0.0",
+    "io.ambidexter.logicality": "https://github.com/ambidexter-unity/Logicality.git#1.0.0",
+    "io.ambidexter.touchhelper": "https://github.com/ambidexter-unity/TouchHelper.git#1.1.0",
+    "io.ambidexter.window": "https://github.com/ambidexter-unity/Window.git#2.0.0",
+    "com.unity.modules.ai": "1.0.0",
+    "com.unity.modules.animation": "1.0.0",
+    "com.unity.modules.assetbundle": "1.0.0",
+    "com.unity.modules.audio": "1.0.0",
+    "com.unity.modules.cloth": "1.0.0",
+    "com.unity.modules.director": "1.0.0",
+    "com.unity.modules.imageconversion": "1.0.0",
+    "com.unity.modules.imgui": "1.0.0",
+    "com.unity.modules.jsonserialize": "1.0.0",
+    "com.unity.modules.particlesystem": "1.0.0",
+    "com.unity.modules.physics": "1.0.0",
+    "com.unity.modules.physics2d": "1.0.0",
+    "com.unity.modules.screencapture": "1.0.0",
+    "com.unity.modules.terrain": "1.0.0",
+    "com.unity.modules.terrainphysics": "1.0.0",
+    "com.unity.modules.tilemap": "1.0.0",
+    "com.unity.modules.ui": "1.0.0",
+    "com.unity.modules.uielements": "1.0.0",
+    "com.unity.modules.umbra": "1.0.0",
+    "com.unity.modules.unityanalytics": "1.0.0",
+    "com.unity.modules.unitywebrequest": "1.0.0",
+    "com.unity.modules.unitywebrequestassetbundle": "1.0.0",
+    "com.unity.modules.unitywebrequestaudio": "1.0.0",
+    "com.unity.modules.unitywebrequesttexture": "1.0.0",
+    "com.unity.modules.unitywebrequestwww": "1.0.0",
+    "com.unity.modules.vehicles": "1.0.0",
+    "com.unity.modules.video": "1.0.0",
+    "com.unity.modules.vr": "1.0.0",
+    "com.unity.modules.wind": "1.0.0",
+    "com.unity.modules.xr": "1.0.0"
+  },
+  "scopedRegistries": [
+    {
+      "name": "Unity",
+      "url": "https://packages.unity.com",
+      "scopes": [
+        "com.unity"
+      ]
+    },
+    {
+      "name": "XCrew",
+      "url": "http://xcrew.dev",
+      "scopes": [
+        "com"
+      ]
+    }
+  ],
+  "lock": {
+    "io.ambidexter.locale": {
+      "hash": "8c964a9dcc96e68e832eeb366384c0203c3e8262",
+      "revision": "2.0.0"
+    },
+    "io.ambidexter.logicality": {
+      "hash": "0a5df1954199519f240fee2bc926c5164b11e88a",
+      "revision": "1.0.0"
+    },
+    "io.ambidexter.touchhelper": {
+      "hash": "4dd6e0066a0cc181ed2ce49a2e4a78a390c8bd5b",
+      "revision": "1.1.0"
+    },
+    "io.ambidexter.window": {
+      "hash": "b812f95eff23634a6e0b60e1edb7250b1ded7b90",
+      "revision": "2.0.0"
+    }
+  }
+}
