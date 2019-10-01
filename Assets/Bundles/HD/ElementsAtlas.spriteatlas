@@ -6,7 +6,7 @@ SpriteAtlas:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: WindowAtlas
+  m_Name: ElementsAtlas
   m_EditorData:
     serializedVersion: 2
     textureSettings:
@@ -54,5 +54,5 @@ SpriteAtlas:
   - UI_BOLT
   - BTN_BLUE_CIRCLE_OUT
   - BTN_GREEN_CIRCLE_IN
-  m_Tag: WindowAtlas
+  m_Tag: ElementsAtlas
   m_IsVariant: 0

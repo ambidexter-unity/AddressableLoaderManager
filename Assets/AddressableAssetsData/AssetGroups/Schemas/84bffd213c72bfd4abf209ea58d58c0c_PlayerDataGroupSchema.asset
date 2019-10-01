@@ -9,11 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c72b15f5f0e7468ba8283bcd07f21bef, type: 3}
-  m_Name: RemoteAudioSettings
+  m_Script: {fileID: 11500000, guid: b1487f5d688e4f94f828f879d599dbdc, type: 3}
+  m_Name: 84bffd213c72bfd4abf209ea58d58c0c_PlayerDataGroupSchema
   m_EditorClassIdentifier: 
-  _locales:
-  - Language: 42
-    Clips:
-    - Id: main_track
-      Clip: {fileID: 8300000, guid: 744769c2bd36aa94c94f820e8ab12158, type: 3}
+  m_Group: {fileID: 0}
+  m_IncludeResourcesFolders: 1
+  m_IncludeBuildSettingsScenes: 1

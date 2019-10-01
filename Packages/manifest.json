@@ -2,15 +2,16 @@
   "dependencies": {
     "com.demigiant.dotween": "1.2.23",
     "com.modesttree.zenject": "8.0.0",
-    "com.modesttree.zenject.signals": "8.0.0",
     "com.unity.addressables": "1.2.4",
-    "com.unity.ads": "2.0.8",
-    "com.unity.analytics": "3.3.2",
     "com.unity.collab-proxy": "1.2.16",
-    "com.unity.package-manager-ui": "2.1.2",
-    "com.unity.purchasing": "2.0.6",
+    "com.unity.ext.nunit": "1.0.0",
+    "com.unity.ide.rider": "1.1.0",
+    "com.unity.ide.vscode": "1.1.0",
+    "com.unity.package-manager-ui": "2.2.0",
+    "com.unity.test-framework": "1.0.13",
     "com.unity.textmeshpro": "2.0.1",
-    "com.unity.timeline": "1.0.0",
+    "com.unity.timeline": "1.1.0",
+    "com.unity.ugui": "1.0.0",
     "io.ambidexter.audiomanager": "https://github.com/ambidexter-unity/AudioManager.git#2.0.0",
     "io.ambidexter.extensions": "https://github.com/ambidexter-unity/Extensions.git#1.0.1",
     "io.ambidexter.locale": "https://github.com/ambidexter-unity/Locale.git#2.0.0",
@@ -18,6 +19,7 @@
     "io.ambidexter.touchhelper": "https://github.com/ambidexter-unity/TouchHelper.git#1.1.0",
     "io.ambidexter.window": "https://github.com/ambidexter-unity/Window.git#2.0.0",
     "com.unity.modules.ai": "1.0.0",
+    "com.unity.modules.androidjni": "1.0.0",
     "com.unity.modules.animation": "1.0.0",
     "com.unity.modules.assetbundle": "1.0.0",
     "com.unity.modules.audio": "1.0.0",
@@ -48,26 +50,14 @@
     "com.unity.modules.wind": "1.0.0",
     "com.unity.modules.xr": "1.0.0"
   },
-  "scopedRegistries": [
-    {
-      "name": "Unity",
-      "url": "https://packages.unity.com",
-      "scopes": [
-        "com.unity"
-      ]
-    },
-    {
-      "name": "XCrew",
-      "url": "http://xcrew.dev",
-      "scopes": [
-        "com"
-      ]
-    }
-  ],
   "lock": {
     "io.ambidexter.audiomanager": {
       "hash": "5f0d8f8ab3ec5cbafb471578780cdf5e5eadb459",
       "revision": "2.0.0"
+    },
+    "io.ambidexter.extensions": {
+      "hash": "f5a9bc4b03ab95dd4210d8c945121d638ca12307",
+      "revision": "1.0.1"
     },
     "io.ambidexter.locale": {
       "hash": "8c964a9dcc96e68e832eeb366384c0203c3e8262",
@@ -84,10 +74,22 @@
     "io.ambidexter.window": {
       "hash": "b812f95eff23634a6e0b60e1edb7250b1ded7b90",
       "revision": "2.0.0"
-    },
-    "io.ambidexter.extensions": {
-      "hash": "f5a9bc4b03ab95dd4210d8c945121d638ca12307",
-      "revision": "1.0.1"
     }
-  }
+  },
+  "scopedRegistries": [
+    {
+      "name": "Unity",
+      "url": "https://packages.unity.com",
+      "scopes": [
+        "com.unity"
+      ]
+    },
+    {
+      "name": "XCrew",
+      "url": "http://xcrew.dev",
+      "scopes": [
+        "com"
+      ]
+    }
+  ]
 }

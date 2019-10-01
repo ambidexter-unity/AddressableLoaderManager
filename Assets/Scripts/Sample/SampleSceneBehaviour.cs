@@ -35,13 +35,11 @@ namespace Sample
 
 		private void OnInitComplete(IGameTask task)
 		{
-			
-//			_addressableLoaderManager.LoadAddressable("WindowAtlas", "sd");
-/*
-				.CompletedEvent += status =>
-				_ldr = _addressableLoaderManager.LoadAddressable<object>("Popup2");
-*/
-//			Debug.Log("Download percent: 0");
+			_addressableLoaderManager.LoadAddressable("ElementsAtlas", "hd")
+				.CompletedEvent += s1 =>
+				_addressableLoaderManager.LoadAddressable("RemotePopup")
+					.CompletedEvent += s2 =>
+					_windowManager.ShowWindow("popup_1");
 		}
 /*
 

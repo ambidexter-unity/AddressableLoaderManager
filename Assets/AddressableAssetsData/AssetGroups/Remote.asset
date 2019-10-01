@@ -15,47 +15,25 @@ MonoBehaviour:
   m_GroupName: Remote
   m_Data:
     m_SerializedData: []
-  m_GUID: e351efc1f05a0a74d8ca42bc05c664cd
+  m_GUID: 20602ecf2583b1145883ecb1962f0d9e
   m_SerializeEntries:
-  - m_GUID: 0cd19924ea7ac8646b2933d4cba11c45
-    m_Address: remote_locale
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: 218c942ef38524846b2965c404ce4fe5
-    m_Address: Popup2
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: 25f259d73e5fa724cb99bf2d02570329
-    m_Address: GraphicsAtlas
+  - m_GUID: 45d8a05450faee946b5cbf164dc18ea3
+    m_Address: ElementsAtlas
     m_ReadOnly: 0
     m_SerializedLabels:
     - sd
-  - m_GUID: 55a92da636a434a4881e85ba588fa463
-    m_Address: RemoteAudioSettings
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: 61c3dd4f1ecd2264e8f8b44a9838bcfa
-    m_Address: WindowAtlas
+  - m_GUID: ee0f1d0386a282e4a806c2060185bb6b
+    m_Address: ElementsAtlas
     m_ReadOnly: 0
     m_SerializedLabels:
     - hd
-  - m_GUID: 67f9c6872a4845f478dc4ec3cdaadb6d
-    m_Address: GraphicsAtlas
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - hd
-  - m_GUID: 744769c2bd36aa94c94f820e8ab12158
-    m_Address: Assets/Bundles/Sound/Bruno Dubois - Velpo Band.mp3
+  - m_GUID: f187ca50b2f8c65498833f43da4c2f76
+    m_Address: RemotePopup
     m_ReadOnly: 0
     m_SerializedLabels: []
-  - m_GUID: 8e173f25d43913e4fba9f05027526298
-    m_Address: WindowAtlas
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - sd
   m_ReadOnly: 0
-  m_Settings: {fileID: 11400000, guid: 616e4f1c0704ac84a832db3cf5979337, type: 2}
+  m_Settings: {fileID: 11400000, guid: 16d0d2cfe6cc06c4ab7f113cf5cb0c92, type: 2}
   m_SchemaSet:
     m_Schemas:
-    - {fileID: 11400000, guid: 16da9c8dbd902694dad29a235668e0f9, type: 2}
-    - {fileID: 11400000, guid: 0bb4c95700fcc9b408f6dcce18d07d46, type: 2}
+    - {fileID: 11400000, guid: 47b7b98cdfad2a340a9aa294c75cc42c, type: 2}
+    - {fileID: 11400000, guid: f7976993521729e4fa711426bc08661e, type: 2}

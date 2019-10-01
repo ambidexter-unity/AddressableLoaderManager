@@ -54,6 +54,8 @@ namespace Common.BundleManager
 
 		private void OnSpriteAtlasRequested(string atlasName, Action<SpriteAtlas> callback)
 		{
+			Debug.LogFormat("Require atlas {0} that is {1}", atlasName,
+				_atlases.Count(atlas => atlas.name == atlasName) > 0 ? "exists" : "not exists");
 			callback?.Invoke(_atlases.FirstOrDefault(asset => asset.name == atlasName));
 		}
 
@@ -62,35 +64,6 @@ namespace Common.BundleManager
 		{
 			if (_handle != null || _isDisposed) return;
 			_loadRoutine = StartCoroutine(LoadAssetsRoutine(keys.Cast<object>().ToList(), mergeMode));
-
-/*
-			var op = Addressables.LoadAssetsAsync<T>(keys.Cast<object>().ToList(), OnAssetLoaded, mergeMode);
-
-			void OnCompleted(IList<T> result)
-			{
-				_getPercent = GetOne;
-
-				if (_atlases.Any())
-				{
-					SpriteAtlasManager.atlasRequested += OnSpriteAtlasRequested;
-				}
-
-				Assets = result.ToList();
-				_phase = Phase.Loaded;
-				CompletedEvent?.Invoke(op.Status);
-			}
-
-			if (op.IsDone)
-			{
-				OnCompleted(op.Result);
-				_getPercent = GetOne;
-			}
-			else
-			{
-				op.Completed += handle => OnCompleted(handle.Result);
-				_getPercent = () => op.PercentComplete;
-			}
-*/
 		}
 
 		private IEnumerator LoadAssetsRoutine(IList<object> keys, Addressables.MergeMode mergeMode)
@@ -101,10 +74,19 @@ namespace Common.BundleManager
 			if (!_isDisposed && _handle.Value.Status == AsyncOperationStatus.Succeeded)
 			{
 				Assets = _handle.Value.Result.ToList();
+				foreach (var o in Assets)
+				{
+					RegisterAsset(o);
+				}
+
+				if (_atlases.Any())
+				{
+					SpriteAtlasManager.atlasRequested += OnSpriteAtlasRequested;
+				}
 			}
 
 			_loadRoutine = null;
-			CompletedEvent?.Invoke(_handle.Value.Status);
+			CompletedEvent?.Invoke(_handle?.Status ?? AsyncOperationStatus.Failed);
 		}
 
 		private void RegisterAsset(object obj)
@@ -181,7 +163,7 @@ namespace Common.BundleManager
 
 			if (_handle != null)
 			{
-				Addressables.Release(_handle);
+				Addressables.Release(_handle.Value);
 				_handle = null;
 			}
 
