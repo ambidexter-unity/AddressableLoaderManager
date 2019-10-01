@@ -11,6 +11,8 @@
     "com.unity.purchasing": "2.0.6",
     "com.unity.textmeshpro": "2.0.1",
     "com.unity.timeline": "1.0.0",
+    "io.ambidexter.audiomanager": "https://github.com/ambidexter-unity/AudioManager.git#2.0.0",
+    "io.ambidexter.extensions": "https://github.com/ambidexter-unity/Extensions.git#1.0.1",
     "io.ambidexter.locale": "https://github.com/ambidexter-unity/Locale.git#2.0.0",
     "io.ambidexter.logicality": "https://github.com/ambidexter-unity/Logicality.git#1.0.0",
     "io.ambidexter.touchhelper": "https://github.com/ambidexter-unity/TouchHelper.git#1.1.0",
@@ -63,6 +65,10 @@
     }
   ],
   "lock": {
+    "io.ambidexter.audiomanager": {
+      "hash": "5f0d8f8ab3ec5cbafb471578780cdf5e5eadb459",
+      "revision": "2.0.0"
+    },
     "io.ambidexter.locale": {
       "hash": "8c964a9dcc96e68e832eeb366384c0203c3e8262",
       "revision": "2.0.0"
@@ -78,6 +84,10 @@
     "io.ambidexter.window": {
       "hash": "b812f95eff23634a6e0b60e1edb7250b1ded7b90",
       "revision": "2.0.0"
+    },
+    "io.ambidexter.extensions": {
+      "hash": "f5a9bc4b03ab95dd4210d8c945121d638ca12307",
+      "revision": "1.0.1"
     }
   }
 }

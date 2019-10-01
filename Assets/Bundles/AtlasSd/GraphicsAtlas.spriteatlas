@@ -6,7 +6,7 @@ SpriteAtlas:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: GraphicsAtlasHd
+  m_Name: GraphicsAtlas
   m_EditorData:
     serializedVersion: 2
     textureSettings:
@@ -26,17 +26,17 @@ SpriteAtlas:
       padding: 4
       blockOffset: 1
       allowAlphaSplitting: 0
-      enableRotation: 0
-      enableTightPacking: 0
-    variantMultiplier: 1
-    packables:
-    - {fileID: 102900000, guid: d494d070c021eb64d9267a35eedc2c6c, type: 3}
-    totalSpriteSurfaceArea: 577296
+      enableRotation: 1
+      enableTightPacking: 1
+    variantMultiplier: 0.25
+    packables: []
+    totalSpriteSurfaceArea: 0
     bindAsDefault: 0
-  m_MasterAtlas: {fileID: 0}
+  m_MasterAtlas: {fileID: 4343727234628468602, guid: 67f9c6872a4845f478dc4ec3cdaadb6d,
+    type: 2}
   m_PackedSprites:
   - {fileID: 21300000, guid: 309cecf0b514a8240bc45c799fa59eef, type: 3}
   m_PackedSpriteNamesToIndex:
   - kitties
-  m_Tag: GraphicsAtlasHd
-  m_IsVariant: 0
+  m_Tag: GraphicsAtlas
+  m_IsVariant: 1

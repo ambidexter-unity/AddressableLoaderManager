@@ -1,4 +1,7 @@
-
+using Common.Audio;
+using Common.Locale;
+using Common.WindowManager;
+using UnityEngine;
 
 // ReSharper disable once CheckNamespace
 namespace Common.BundleManager
@@ -42,9 +45,22 @@ namespace Common.BundleManager
 	/// </summary>
 	public abstract class AddressableLoaderManagerBase : IAddressableLoaderManager
 	{
+		protected abstract ILocaleService LocaleService { get; }
+		protected abstract IWindowManager WindowManager { get; }
+		protected abstract IAudioManager AudioManager { get; }
+
 		// IBundleService
 
-		
+		public IAddressableLoader LoadAddressable(params string[] args)
+		{
+			var ldr = new GameObject("AddressableLoader", typeof(AddressableLoader))
+				.GetComponent<AddressableLoader>();
+			ldr.WindowManager = WindowManager;
+			ldr.LocaleService = LocaleService;
+			ldr.AudioManager = AudioManager;
+			ldr.Load(args);
+			return ldr;
+		}
 
 		// \IBundleService
 
