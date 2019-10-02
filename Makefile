@@ -1,2 +1,2 @@
 deploy:
-	git subtree push --prefix Assets/Plugins/BundleManager origin upm
+	git subtree push --prefix Assets/Plugins/AddressableLoaderManager origin upm
