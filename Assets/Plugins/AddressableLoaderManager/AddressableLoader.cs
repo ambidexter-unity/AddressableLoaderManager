@@ -60,6 +60,8 @@ namespace Common.BundleManager
 
 		public IReadOnlyList<object> Assets { get; private set; }
 
+		public AsyncOperationStatus Status => _handle?.Status ?? AsyncOperationStatus.None;
+
 		internal event Action<AddressableLoader> DisposeEvent;
 
 		public void Dispose()
