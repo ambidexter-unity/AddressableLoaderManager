@@ -3,8 +3,6 @@ using Common.GameService;
 using Common.GameTask;
 using Common.Locale;
 using Common.WindowManager;
-using UnityEngine;
-using UnityEngine.U2D;
 using Zenject;
 
 namespace Sample
@@ -21,7 +19,6 @@ namespace Sample
 
 		public override void InstallBindings()
 		{
-			SpriteAtlasManager.atlasRequested += (s, action) => Debug.LogFormat("Require atlas {0}", s);
 		}
 
 		public override void Start()
@@ -35,29 +32,8 @@ namespace Sample
 
 		private void OnInitComplete(IGameTask task)
 		{
-			_addressableLoaderManager.LoadAddressable("ElementsAtlas", "hd")
-				.CompletedEvent += s1 =>
-				_addressableLoaderManager.LoadAddressable("RemotePopup")
-					.CompletedEvent += s2 =>
-					_windowManager.ShowWindow("popup_1");
-		}
-/*
-
-		private void Update()
-		{
-			if (_ldr == null) return;
-			Debug.LogFormat("Download percent: {0}", _ldr.Progress);
-			if (_ldr.IsLoaded)
-			{
-				OnAssetsLoaded(_ldr);
-				_ldr = null;
-			}
-		}
-*/
-
-		private void OnAssetsLoaded(IAddressableLoader ldr)
-		{
-			_windowManager.ShowWindow("popup_2");
+			_addressableLoaderManager.LoadAddressable("sd")
+					.CompletedEvent += (l, s) => _windowManager.ShowWindow("popup_1");
 		}
 	}
 }

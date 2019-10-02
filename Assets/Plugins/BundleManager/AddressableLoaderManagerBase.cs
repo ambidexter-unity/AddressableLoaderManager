@@ -1,295 +1,142 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
 using Common.Audio;
 using Common.Locale;
 using Common.WindowManager;
 using UnityEngine;
+using UnityEngine.ResourceManagement.AsyncOperations;
+using UnityEngine.U2D;
+using AudioSettings = Common.Audio.AudioSettings;
 
 // ReSharper disable once CheckNamespace
 namespace Common.BundleManager
 {
-	/*
-	// Вспомогательные классы для сериализации манифеста бандлов
-	[Serializable]
-	public class BundleDescription
-	{
-		[SerializeField] private string _name;
-		[SerializeField] private string _hash;
-
-		public string Name => _name;
-		public string Hash => _hash;
-		public Hash128 Hash128 => Hash128.Parse(_hash);
-
-		public BundleDescription(string name, string hash)
-		{
-			_name = name;
-			_hash = hash;
-		}
-	}
-
-	[Serializable]
-	public class BundleManifest
-	{
-		[SerializeField] private List<BundleDescription> _bundles;
-
-		public BundleDescription[] Bundles => _bundles.ToArray();
-
-		public BundleManifest(List<BundleDescription> bundles)
-		{
-			_bundles = bundles;
-		}
-	}
-	//---------------------------------------//
-*/
-
 	/// <summary>
 	/// Сервис управления загрузчиками бандлов.
 	/// </summary>
 	public abstract class AddressableLoaderManagerBase : IAddressableLoaderManager
 	{
+		private readonly List<AddressableLoader> _loaders = new List<AddressableLoader>();
+
+		private readonly Dictionary<string, Action<SpriteAtlas>> _delayedAtlasRequests =
+			new Dictionary<string, Action<SpriteAtlas>>();
+
+		private readonly Regex _rx = new Regex(@"^\w{2}_\w{2}$");
+
 		protected abstract ILocaleService LocaleService { get; }
 		protected abstract IWindowManager WindowManager { get; }
 		protected abstract IAudioManager AudioManager { get; }
+
+		protected AddressableLoaderManagerBase()
+		{
+			SpriteAtlasManager.atlasRequested += OnAtlasRequested;
+		}
+
+		private void OnAtlasRequested(string atlasName, Action<SpriteAtlas> callback)
+		{
+			var atlas = _loaders.SelectMany(loader => loader.Assets).Where(o => o is SpriteAtlas).Cast<SpriteAtlas>()
+				.FirstOrDefault(spriteAtlas => spriteAtlas.name == atlasName);
+			if (atlas) callback?.Invoke(atlas);
+			else _delayedAtlasRequests.Add(atlasName, callback);
+			Debug.LogFormat("Require atlas {0} that is {1}", atlasName, atlas ? "exists" : "not exists");
+		}
 
 		// IBundleService
 
 		public IAddressableLoader LoadAddressable(params string[] args)
 		{
-			var ldr = new GameObject("AddressableLoader", typeof(AddressableLoader))
-				.GetComponent<AddressableLoader>();
-			ldr.WindowManager = WindowManager;
-			ldr.LocaleService = LocaleService;
-			ldr.AudioManager = AudioManager;
+			var ldr = new AddressableLoader();
+
+			_loaders.Add(ldr);
+			ldr.CompletedEvent += LdrOnCompleted;
+			ldr.DisposeEvent += LdrOnDispose;
+
 			ldr.Load(args);
 			return ldr;
 		}
 
+		private void LdrOnDispose(AddressableLoader loader)
+		{
+			loader.DisposeEvent -= LdrOnDispose;
+			_loaders.Remove(loader);
+
+			var sounds = loader.Assets.Where(o => o is AudioSettings).Cast<AudioSettings>()
+				.SelectMany(settings => settings.Clips.Values).SelectMany(clips => clips.Keys)
+				.Distinct().ToArray();
+			var windows = loader.Assets.Where(o => (o as GameObject)?.GetComponent<Window>())
+				.Cast<GameObject>().Select(o => o.GetComponent<Window>().WindowId).ToArray();
+
+			if (sounds.Length > 0) AudioManager.UnregisterClips(sounds);
+
+			foreach (var windowId in windows)
+			{
+				WindowManager.UnregisterWindow(windowId);
+			}
+
+			Resources.UnloadUnusedAssets();
+		}
+
+		private void LdrOnCompleted(IAddressableLoader loader, AsyncOperationStatus status)
+		{
+			loader.CompletedEvent -= LdrOnCompleted;
+
+			var atlases = loader.Assets.Where(o => o is SpriteAtlas).Cast<SpriteAtlas>().ToArray();
+			var sounds = loader.Assets.Where(o => o is AudioSettings).Cast<AudioSettings>().ToArray();
+			var locales = loader.Assets.Where(IsLocale).Cast<TextAsset>().ToArray();
+			var windows = loader.Assets.Where(o => (o as GameObject)?.GetComponent<Window>())
+				.Cast<GameObject>().Select(o => o.GetComponent<Window>()).ToArray();
+
+			if (atlases.Length > 0)
+			{
+				foreach (var pair in _delayedAtlasRequests.ToList())
+				{
+					if (atlases.Any(atlas =>
+					{
+						if (atlas.name != pair.Key) return false;
+						pair.Value?.Invoke(atlas);
+						_delayedAtlasRequests.Remove(pair.Key);
+						return true;
+					}))
+					{
+						Debug.LogFormat("Request for atlas {0} was found and satisfied.", pair.Key);
+						break;
+					}
+				}
+			}
+
+			foreach (var audioSettings in sounds)
+			{
+				foreach (var pair in audioSettings.Clips)
+				{
+					AudioManager.RegisterClips(pair.Value, pair.Key);
+				}
+			}
+
+			foreach (var locale in locales)
+			{
+				LocaleService.AddLocaleCsv(locale.text);
+			}
+
+			foreach (var window in windows)
+			{
+				WindowManager.RegisterWindow(window, true);
+			}
+		}
+
 		// \IBundleService
 
-		/*
-		/// <summary>
-		/// Класс загрузчика бандла, он же служит для освобождения ресурсов через IDisposable.
-		/// </summary>
-		public class BundleLoader : IGameTask, IDisposable
+		private bool IsLocale(object asset)
 		{
-			private readonly BundleDescription _description;
-			private readonly IAudioManager _audioManager;
-			private readonly BoolReactiveProperty _complete = new BoolReactiveProperty(false);
+			var textAsset = asset as TextAsset;
+			if (!textAsset) return false;
 
-			private readonly Dictionary<string, SpriteAtlas> _loadedAtlases = new Dictionary<string, SpriteAtlas>();
-			private readonly HashSet<string> _clips = new HashSet<string>();
-
-			private bool _isDisposed;
-			private Coroutine _loadRoutine;
-
-			public BundleLoader(BundleDescription description, IAudioManager audioManager)
-			{
-				_description = description;
-				_audioManager = audioManager;
-			}
-
-			// IDisposable
-
-			public void Dispose()
-			{
-				if (_isDisposed) return;
-				_isDisposed = true;
-
-				if (_loadedAtlases.Any())
-				{
-					SpriteAtlasManager.atlasRequested -= OnAtlasRequest;
-					_loadedAtlases.Clear();
-				}
-				
-				_audioManager.UnregisterClips(_clips);
-				_clips.Clear();
-
-				BundleLoadersMap.Remove(BundleName);
-
-				if (Complete.Value)
-				{
-					Bundle.Unload(true);
-					Bundle = null;
-				}
-
-				_complete.Dispose();
-			}
-
-			// \IDisposable
-
-			// IGameTask
-
-			public void Start()
-			{
-				if (Complete.Value || _loadRoutine != null || _isDisposed) return;
-				_loadRoutine = MainThreadDispatcher.StartCoroutine(GetAssetBundle(BundleUrl, _description.Hash128));
-			}
-
-			public IReadOnlyReactiveProperty<bool> Complete => _complete;
-
-			// \IGameTask
-
-			private void ManageAtlases()
-			{
-				Assert.IsFalse(_loadedAtlases.Any());
-
-				Bundle.LoadAllAssets<SpriteAtlas>().ToList()
-					.ForEach(atlas => _loadedAtlases.Add(atlas.name, atlas));
-
-				if (_loadedAtlases.Any())
-				{
-					SpriteAtlasManager.atlasRequested += OnAtlasRequest;
-				}
-			}
-
-			private void ManageSounds()
-			{
-				Assert.IsFalse(_clips.Any());
-
-				Bundle.LoadAllAssets<AudioSettings>().ToList()
-					.ForEach(settings =>
-					{
-						var clips = settings.Clips;
-						foreach (var pair in clips)
-						{
-							_audioManager.RegisterClips(pair.Value, pair.Key);
-							pair.Value.Keys.ToList().ForEach(s => _clips.Add(s));
-						}
-					});
-			}
-
-			private void OnAtlasRequest(string atlasName, Action<SpriteAtlas> callback)
-			{
-				callback?.Invoke(_loadedAtlases.TryGetValue(atlasName, out var atlas) ? atlas : null);
-			}
-
-			private IEnumerator GetAssetBundle(string url, Hash128 hash)
-			{
-				DebugConditional.LogFormat("-- load bundle from {0}...", url);
-				var www = UnityWebRequestAssetBundle.GetAssetBundle(url, hash);
-				yield return www.SendWebRequest();
-
-				if (www.isNetworkError || www.isHttpError)
-				{
-					throw new Exception($"Failed to load bundle {url} with error: {www.error}");
-				}
-
-				_loadRoutine = null;
-
-				Bundle = DownloadHandlerAssetBundle.GetContent(www);
-
-				if (_isDisposed)
-				{
-					Bundle.Unload(true);
-					Bundle = null;
-				}
-				else
-				{
-					ManageAtlases();
-					ManageSounds();
-					DebugConditional.Log("... bundle loaded successfully.");
-					_complete.SetValueAndForceNotify(true);
-				}
-			}
-
-			/// <summary>
-			/// Имя бандла.
-			/// </summary>
-			public string BundleName => _description.Name;
-
-			/// <summary>
-			/// URL бандла.
-			/// </summary>
-			public string BundleUrl
-			{
-				get
-				{
-					var path = $@"{Application.streamingAssetsPath}/Bundles/{BundleName}";
-						
-#if UNITY_IOS
-					path = $"file://{path}";
-#endif
-					return path;
-				}
-			}
-
-			/// <summary>
-			/// Загруженный бандл.
-			/// </summary>
-			public AssetBundle Bundle { get; private set; }
+			var firstLine = new StringReader(textAsset.text).ReadLine();
+			if (string.IsNullOrEmpty(firstLine)) return false;
+			var keys = firstLine.Split(',').Where(s => !string.IsNullOrEmpty(s)).ToArray();
+			return keys.All(s => _rx.IsMatch(s));
 		}
-		//---------------------------------------//
-
-
-		private readonly BoolReactiveProperty _ready = new BoolReactiveProperty(false);
-		private Dictionary<string, BundleDescription> _bundleDataMap;
-
-		private static readonly Dictionary<string, BundleLoader> BundleLoadersMap =
-			new Dictionary<string, BundleLoader>();
-
-#pragma warning disable 649
-		[Inject] private readonly IAudioManager _audioManager;
-#pragma warning restore 649
-
-		// IGameService
-
-		public void Initialize()
-		{
-			var manifestPath = $@"{Application.streamingAssetsPath}/Bundles/manifest.json";
-						
-#if UNITY_IOS
-			manifestPath = $"file://{manifestPath}";
-#endif
-			MainThreadDispatcher.StartCoroutine(LoadManifest(manifestPath));
-		}
-
-		public IReadOnlyReactiveProperty<bool> Ready => _ready;
-
-		// \IGameService
-
-		/// <summary>
-		/// Получить загрузчик бандла.
-		/// </summary>
-		/// <param name="bundleName">Имя бандла, для которого получается загрузчик.</param>
-		/// <returns>Загрузчик бандла.</returns>
-		public BundleLoader GetBundleLoader(string bundleName)
-		{
-			if (!Ready.Value)
-			{
-				Debug.LogError("BundleManager is not initialized yet.");
-				return null;
-			}
-
-			if (BundleLoadersMap.TryGetValue(bundleName, out var loader)) return loader;
-
-			if (!_bundleDataMap.TryGetValue(bundleName, out var data))
-			{
-				Debug.LogErrorFormat("There is no data for bundle {0} in manifest.", bundleName);
-				return null;
-			}
-
-			loader = new BundleLoader(data,_audioManager);
-			BundleLoadersMap.Add(bundleName, loader);
-			return loader;
-		}
-
-		private IEnumerator LoadManifest(string path)
-		{
-			DebugConditional.LogFormat("-- load bundles manifest from {0}...", path);
-			using (var www = UnityWebRequest.Get(path))
-			{
-				yield return www.SendWebRequest();
-
-				if (www.isNetworkError || www.isHttpError)
-				{
-					Debug.LogErrorFormat("Failed to load manifest from {0} with error: {1}", path, www.error);
-				}
-				else
-				{
-					var manifest = JsonUtility.FromJson<BundleManifest>(www.downloadHandler.text);
-					_bundleDataMap = manifest.Bundles.ToDictionary(description => description.Name);
-					DebugConditional.Log("... manifest loaded successfully.");
-					_ready.SetValueAndForceNotify(true);
-				}
-			}
-		} */
 	}
 }
