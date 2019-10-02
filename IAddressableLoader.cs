@@ -14,5 +14,6 @@ namespace Common.BundleManager
 		float Progress { get; }
 		bool IsLoaded { get; }
 		IReadOnlyList<object> Assets { get; }
+		AsyncOperationStatus Status { get; }
 	}
 }
